@@ -14,6 +14,7 @@ the code to your liking.
 > * **Add Decryption Methods, NONE AT THE MOMENT**
 
 # Usage (Pieces of code, Look in Source)
+![alt text](https://github.com/Zurek0x/zeno_RansomWare/blob/main/media/drg.png?raw=true)
 ```python
 # =?/Settings/?= #
 hostname=socket.gethostname()    # Get Hostname
