@@ -1,2 +1,2 @@
-# zeno_RansomWare
-Ransom Ware Written in Python
+# Zeno RansomWare
+Smart Ransomware Written in Python
